@@ -12,7 +12,7 @@ const Common = () => {
         const v = []
         axios.get('/temp/common/').then((response) => {
             response.data.data.forEach(ele => {
-                t.push(ele['time']);
+                t.push(ele['time'].slice(0, 8));
                 v.push(ele['value']);
             })
             setTimes(t);

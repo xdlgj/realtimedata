@@ -1,8 +1,35 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import ReactECharts from 'echarts-for-react';
+import axios from 'axios';
 
 
 const Poll = () => {
+    const [times, setTimes] = useState([]);
+    const [temp, setTemp] = useState([]);
+
+    const t = [];
+    const v = [];
+    let end_time;
+
+    const getData = () => {
+        axios.get('temp/poll/', {params: {start_time: end_time}}).then((response) => {
+            response.data.data.forEach(ele => {
+                t.push(ele.time.slice(0, 8));
+                v.push(ele.value);
+                end_time = ele.time;
+            });
+            setTimes([...t]);
+            setTemp([...v]);
+        })
+    }
+
+    useEffect(() => {
+        getData();
+        const interval = setInterval(getData,2000)
+        return () => {
+            clearInterval(interval);
+        }
+    }, []);
 
     let option = {
       title: {
@@ -11,14 +38,14 @@ const Poll = () => {
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: ['09:00:00', '10:00:00', '11:00:00', '12:00:00', '13:00:00', '14:00:00', '15:00:00']
+        data: times,
       },
       yAxis: {
         type: 'value',
       },
       series: [
         {
-          data: [150, 230, 224, 218, 135, 147, 260],
+          data: temp,
           type: 'line'
         }
       ]
