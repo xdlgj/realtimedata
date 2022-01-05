@@ -4,26 +4,45 @@ import axios from 'axios';
 
 
 const Common = () => {
-    const [option, setOption] = useState({});
+    const [times, setTimes] = useState([]);
+    const [temp, setTemp] = useState([]);
+
+    const getData = () => {
+        const t = []
+        const v = []
+        axios.get('/temp/common/').then((response) => {
+            response.data.data.forEach(ele => {
+                t.push(ele['time']);
+                v.push(ele['value']);
+            })
+            setTimes(t);
+            setTemp(v);
+        })
+    }
+
     useEffect(() => {
-        console.log(option)
+        getData();
+        const interval = setInterval(getData,2000)
+        return () => {
+            clearInterval(interval);
+        }
     }, []);
 
-    let option1 = {
+    let option = {
       title: {
         text: '传统方法'
       },
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: ['09:00:00', '10:00:00', '11:00:00', '12:00:00', '13:00:00', '14:00:00', '15:00:00']
+        data: times,
       },
       yAxis: {
         type: 'value',
       },
       series: [
         {
-          data: [150, 230, 224, 218, 135, 147, 260],
+          data: temp,
           type: 'line'
         }
       ]
