@@ -1,3 +1,5 @@
+from time import sleep
+
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -23,4 +25,14 @@ class ValueGenericViewSet(GenericViewSet):
     @action(methods=['GET'], detail=False)
     def poll(self, request):
         ser = self.get_serializer(instance=self.get_queryset(), many=True)
+        return Response({"data": ser.data})
+
+    @action(methods=['GET'], detail=False)
+    def long_poll(self, request):
+        for i in range(20):
+            obj = self.get_queryset()
+            if obj:
+                break
+            sleep(1)
+        ser = self.get_serializer(instance=obj, many=True)
         return Response({"data": ser.data})

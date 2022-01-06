@@ -18,14 +18,16 @@ const Poll = () => {
                 v.push(ele.value);
                 end_time = ele.time;
             });
-            setTimes([...t]);
-            setTemp([...v]);
+            if (t.length !== 0) {
+                setTimes([...t]);
+                setTemp([...v]);
+            }
         })
     }
 
     useEffect(() => {
         getData();
-        const interval = setInterval(getData,2000)
+        const interval = setInterval(getData,5000)
         return () => {
             clearInterval(interval);
         }

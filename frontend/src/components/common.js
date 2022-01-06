@@ -22,7 +22,7 @@ const Common = () => {
 
     useEffect(() => {
         getData();
-        const interval = setInterval(getData,2000)
+        const interval = setInterval(getData,5000)
         return () => {
             clearInterval(interval);
         }
