@@ -29,7 +29,7 @@ class ValueGenericViewSet(GenericViewSet):
 
     @action(methods=['GET'], detail=False)
     def long_poll(self, request):
-        for i in range(20):
+        for i in range(10):
             obj = self.get_queryset()
             if obj:
                 break

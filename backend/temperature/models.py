@@ -10,4 +10,3 @@ class Temp(models.Model):
 
     class Meta:
         db_table = 'temp'
-

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'temperature',
     'rest_framework',
     'corsheaders',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -73,6 +74,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'backend.wsgi.application'
+ASGI_APPLICATION = 'backend.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": ["redis://127.0.0.1:6379/3"],
+        },
+    },
+}
 
 
 # Database

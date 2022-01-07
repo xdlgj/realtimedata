@@ -1,8 +1,33 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import ReactECharts from 'echarts-for-react';
+import axios from 'axios';
 
 
-const WebSocket = () => {
+const MyWebSocket = () => {
+    const [times, setTimes] = useState([]);
+    const [temp, setTemp] = useState([]);
+    const t = [];
+    const v = [];
+
+    useEffect(() => {
+        const socket = new WebSocket('ws://127.0.0.1:8000/ws/temp/1/');
+        socket.onopen = e => {
+            console.log("onopen", e);
+        }
+        socket.onmessage = e => {
+            const data = JSON.parse(e.data);
+            data.data.forEach(ele => {
+                t.push(ele.time.slice(0, 8));
+                v.push(ele.value);
+            })
+
+            setTimes([...t]);
+            setTemp([...v]);
+        };
+        return () => {
+            socket && socket.close()
+        }
+    }, []);
 
     let option = {
       title: {
@@ -11,14 +36,14 @@ const WebSocket = () => {
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: ['09:00:00', '10:00:00', '11:00:00', '12:00:00', '13:00:00', '14:00:00', '15:00:00']
+        data: times,
       },
       yAxis: {
         type: 'value',
       },
       series: [
         {
-          data: [150, 230, 224, 218, 135, 147, 260],
+          data: temp,
           type: 'line'
         }
       ]
@@ -31,4 +56,4 @@ const WebSocket = () => {
     )
 }
 
-export default WebSocket;
+export default MyWebSocket;
