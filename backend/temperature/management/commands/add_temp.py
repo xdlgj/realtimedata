@@ -1,6 +1,8 @@
+import json
 from django.core.management.base import BaseCommand
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+from django_redis import get_redis_connection
 
 from temperature.models import Temp
 from temperature.serializers import TempSerializer
@@ -23,3 +25,4 @@ class Command(BaseCommand):
                 "data": TempSerializer(instance=[temp], many=True).data,
             }
         )
+        get_redis_connection().set('temp', json.dumps({'data': TempSerializer(instance=[temp], many=True).data}))

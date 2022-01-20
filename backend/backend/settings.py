@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'temperature',
     'rest_framework',
     'corsheaders',
-    'channels',
 ]
 
 MIDDLEWARE = [
@@ -74,13 +73,24 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'backend.wsgi.application'
-ASGI_APPLICATION = 'backend.asgi.application'
+# ASGI_APPLICATION = 'backend.asgi.application'
 
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
             "hosts": ["redis://127.0.0.1:6379/3"],
+        },
+    },
+}
+
+# 设置缓存
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',  # 缓存使用redis数据库储存
+        'LOCATION': 'redis://127.0.0.1:6379/4',  # 使用本地的6379端口(redis的默认端口)第0个数据库(redis共有16个数据库0-15)
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",  # 使用django_redis的默认参数
         },
     },
 }
