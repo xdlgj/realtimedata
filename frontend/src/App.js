@@ -8,7 +8,10 @@ import SSE from './components/sse';
 
 const App = () => (
   <div className="App">
-        <SSE />
+    <Common />
+    <Poll />
+    <LongPoll />
+    <SSE />
   </div>
 );
 
